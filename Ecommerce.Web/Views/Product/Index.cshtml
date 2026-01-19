@@ -1,1 +1,51 @@
-﻿
+﻿@model List<Product>
+
+
+<h2 class="text-center mb-5">Products</h2>
+
+<div class="row mb-5">
+	<div class="col">
+		<a class="btn btn-primary" asp-controller="Product" asp-action="Create"><i class="bi bi-plus-circle"></i> Create Product</a>
+	</div>
+	<div class="col">
+
+	</div>
+</div>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Brand</th>
+			<th>Category</th>
+			<th>Price</th>
+			<th>Image</th>
+			<th>Created At</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var product in Model)
+		{
+			<tr>
+				<td>@product.Id</td>
+				<td>@product.Name</td>
+				<td>@product.Brand.Name</td>
+				<td>@product.Category.Name</td>
+				<td>@product.Price.ToString("C")</td>
+				<td><img src="/images/products/@product.ImageUrl" width="100"/></td>
+				<td>@product.CreatedAt.ToString("MM/dd/yyyy")</td>
+				<td style="white-space: nowrap">
+					<a class="btn btn-primary" asp-controller="Product" asp-action="Edit" 
+					   asp-route-id="@product.Id"><i class="bi bi-pencil-square"></i> Edit</a>
+
+					<a class="btn btn-danger" asp-controller="Product" asp-action="Delete" 
+					   asp-route-id="@product.Id"><i class="bi bi-trash-fill"></i> Delete</a>
+				</td>
+			</tr>
+			
+
+		}
+	</tbody>
+</table>
