@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Ecommerce.DataAccess/Ecommerce.DataAccess.csproj" />
+  <Project Path="Ecommerce.Models/Ecommerce.Models.csproj" />
+  <Project Path="Ecommerce.Web/Ecommerce.Web.csproj" />
+</Solution>
