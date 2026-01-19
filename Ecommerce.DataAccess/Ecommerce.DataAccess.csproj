@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repository\IRepository\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Ecommerce.Models\Ecommerce.Models.csproj" />
   </ItemGroup>
 
