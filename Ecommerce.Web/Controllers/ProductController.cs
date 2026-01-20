@@ -174,5 +174,24 @@ namespace Ecommerce.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var product = await _unitOfWork.Products.GetAsync(id);
+            if (product == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            string filePath = Path.Combine(_environment.WebRootPath, "images/products", product.ImageUrl);
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+            _unitOfWork.Products.Remove(product);
+            await _unitOfWork.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
