@@ -53,33 +53,35 @@
 </table>
 
 
-<script>
-	document.addEventListener("DOMContentLoaded", function () {
+@section Scripts {
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
 
-		document.querySelectorAll(".delete-btn").forEach(btn => {
+			document.querySelectorAll(".delete-btn").forEach(btn => {
 
-			btn.addEventListener("click", function (e) {
-				e.preventDefault(); // stop navigation
+				btn.addEventListener("click", function (e) {
+					e.preventDefault(); // stop navigation
 
-				const url = this.getAttribute("href");
+					const url = this.getAttribute("href");
 
-				Swal.fire({
-					title: 'Are you sure?',
-					text: "You won't be able to revert this!",
-					icon: 'warning',
-					showCancelButton: true,
-					confirmButtonColor: '#d33',
-					cancelButtonColor: '#3085d6',
-					confirmButtonText: 'Yes, delete it!',
-					cancelButtonText: 'Cancel'
-				}).then((result) => {
-					if (result.isConfirmed) {
-						window.location.href = url; // redirect after confirm
-					}
+					Swal.fire({
+						title: 'Are you sure?',
+						text: "You won't be able to revert this!",
+						icon: 'warning',
+						showCancelButton: true,
+						confirmButtonColor: '#d33',
+						cancelButtonColor: '#3085d6',
+						confirmButtonText: 'Yes, delete it!',
+						cancelButtonText: 'Cancel'
+					}).then((result) => {
+						if (result.isConfirmed) {
+							window.location.href = url; // redirect after confirm
+						}
+					});
 				});
+
 			});
 
 		});
-
-	});
-</script>
+	</script>
+}

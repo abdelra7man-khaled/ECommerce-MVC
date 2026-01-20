@@ -8,14 +8,14 @@
 			<div class="row mb-3">
 				<label class="col-sm-4 col-form-label" asp-for="Name"></label>
 				<div class="col-sm-8">
-					<input asp-for="Name" class="form-control" />
+					<input asp-for="Name" class="form-control border-0 shadow order-textbox" />
 					<span asp-validation-for="Name" class="text-danger"></span>
 				</div>
 			</div>
 			<div class="row mb-3">
 				<label class="col-sm-4 col-form-label">Brand</label>
 				<div class="col-sm-8">
-					<select asp-for="BrandId" asp-items="Model.Brands" class="form-select">
+					<select asp-for="BrandId" asp-items="Model.Brands" class="form-select border-0 shadow order-textbox">
 						<option value="0" disabled selected>--Select Brand--</option>
 					</select>
 					<span asp-validation-for="BrandId" class="text-danger"></span>
@@ -25,7 +25,7 @@
 			<div class="row mb-3">
 				<label class="col-sm-4 col-form-label">Category</label>
 				<div class="col-sm-8">
-					<select asp-for="CategoryId" asp-items="Model.Categories" class="form-select">
+					<select asp-for="CategoryId" asp-items="Model.Categories" class="form-select border-0 shadow order-textbox">
 						<option value="0" disabled selected>--Select Category--</option>
 					</select>
 					<span asp-validation-for="CategoryId" class="text-danger"></span>
@@ -35,21 +35,21 @@
 			<div class="row mb-3">
 				<label class="col-sm-4 col-form-label" asp-for="Price"></label>
 				<div class="col-sm-8">
-					<input asp-for="Price" class="form-control" />
+					<input asp-for="Price" class="form-control border-0 shadow order-textbox" />
 					<span asp-validation-for="Price" class="text-danger"></span>
 				</div>
 			</div>
 			<div class="row mb-3">
 				<label class="col-sm-4 col-form-label" asp-for="Description"></label>
 				<div class="col-sm-8">
-					<textarea asp-for="Description" class="form-control"></textarea> 
+					<textarea asp-for="Description" class="form-control border-0 shadow order-textbox"></textarea>
 					<span asp-validation-for="Description" class="text-danger"></span>
 				</div>
 			</div>
 			<div class="row mb-3">
 				<label class="col-sm-4 col-form-label" asp-for="ImageFile">Image</label>
 				<div class="col-sm-8">
-					<input asp-for="ImageFile" class="form-control" />
+					<input asp-for="ImageFile" class="form-control border-0 shadow order-textbox" />
 					<span asp-validation-for="ImageFile" class="text-danger"></span>
 				</div>
 			</div>
@@ -66,3 +66,27 @@
 		</form>
 	</div>
 </div>
+
+@section Scripts {
+
+	<script>
+		tinymce.init({
+		  selector: 'textarea',
+		  plugins: [
+			'anchor', 'autolink', 'charmap', 'codesample', 'emoticons' , 'lists' , 'table', 'visualblocks', 'wordcount',
+			'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'advtemplate', 'ai', 'uploadcare', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown','importword', 'exportword', 'exportpdf'
+		  ],
+		  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | addcomment showcomments | spellcheckdialog a11ycheck typography uploadcare | align lineheight | checklist numlist bullist indent outdent',
+		  tinycomments_mode: 'embedded',
+		  tinycomments_author: 'Author name',
+		  mergetags_list: [
+			{ value: 'First.Name', title: 'First Name' },
+			{ value: 'Email', title: 'Email' },
+		  ],
+		  ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+		  uploadcare_public_key: 'f0af56d848a0e0ca4e89',
+		});
+	</script>
+
+	<partial name="_ValidationScriptsPartial" />
+}
