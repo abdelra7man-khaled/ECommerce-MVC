@@ -10,13 +10,19 @@ namespace Ecommerce.Web.Controllers
     public class ProductController(IUnitOfWork _unitOfWork, IWebHostEnvironment _environment) : Controller
     {
         private const int PAGE_SIZE = 5;
-        public IActionResult Index(int pageNumber)
+        public IActionResult Index(int pageNumber, string? search)
         {
 
             IQueryable<Product> query = _unitOfWork.Products.Query()
                         .Include(p => p.Category)
                         .Include(p => p.Brand)
                         .OrderByDescending(p => p.CreatedAt);
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(p => p.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                                    p.Brand.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
+            }
 
             if (pageNumber < 1)
             {
@@ -31,6 +37,8 @@ namespace Ecommerce.Web.Controllers
 
             ViewBag.PageNumber = pageNumber;
             ViewBag.TotalPages = totalPages;
+
+            ViewBag.Search = search ?? string.Empty;
 
             return View(products);
         }

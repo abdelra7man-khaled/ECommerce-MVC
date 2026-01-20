@@ -3,6 +3,7 @@
 @{
 	int pageNumber = ViewBag.PageNumber;
 	int totalPages = ViewBag.TotalPages;
+	string search = ViewBag.Search;
 }
 
 <h2 class="text-center mb-5">Products</h2>
@@ -12,7 +13,10 @@
 		<a class="btn btn-primary" asp-controller="Product" asp-action="Create"><i class="bi bi-plus-circle"></i> Create Product</a>
 	</div>
 	<div class="col">
-
+		<form class="d-flex" role="search">
+			<input class="form-control me-2" type="search" name="search" value="@search" placeholder="search by name or brand" aria-label="Search" />
+			<button class="btn btn-outline-success" type="submit">Search</button>
+		</form>
 	</div>
 </div>
 
@@ -64,7 +68,7 @@
 		<li class="page-item @(pageNumber <= 1 ? "d-none" : "")">
 			<a class="page-link"
 			   href="@(pageNumber > 1
-					  	  ? Url.Action("Index", new { pageNumber = pageNumber - 1 })
+								  	  ? Url.Action("Index", new { pageNumber = pageNumber - 1, search = search })
 					  	  : "#")"
 			   aria-label="Previous">
 				<span aria-hidden="true">&laquo;</span>
@@ -76,7 +80,7 @@
 		{
 			<li class="page-item @(i == pageNumber ? "active" : "")">
 				<a class="page-link"
-				   href="@Url.Action("Index", new { pageNumber = i })">
+				   href="@Url.Action("Index", new { pageNumber = i  , search = search})">
 					@i
 				</a>
 			</li>
@@ -86,7 +90,7 @@
 		<li class="page-item @(pageNumber >= totalPages ? "d-none" : "")">
 			<a class="page-link"
 			   href="@(pageNumber < totalPages
-					  	  ? Url.Action("Index", new { pageNumber = pageNumber + 1 })
+								  ? Url.Action("Index", new { pageNumber = pageNumber + 1, search = search })
                       	  : "#")"
 			   aria-label="Next">
 				<span aria-hidden="true">&raquo;</span>
