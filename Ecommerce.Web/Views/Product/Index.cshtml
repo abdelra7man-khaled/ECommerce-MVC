@@ -1,5 +1,9 @@
 ﻿@model List<Product>
 
+@{
+	int pageNumber = ViewBag.PageNumber;
+	int totalPages = ViewBag.TotalPages;
+}
 
 <h2 class="text-center mb-5">Products</h2>
 
@@ -51,6 +55,47 @@
 		}
 	</tbody>
 </table>
+
+
+<nav>
+	<ul class="pagination justify-content-center">
+
+		<!-- Previous -->
+		<li class="page-item @(pageNumber <= 1 ? "d-none" : "")">
+			<a class="page-link"
+			   href="@(pageNumber > 1
+					  	  ? Url.Action("Index", new { pageNumber = pageNumber - 1 })
+					  	  : "#")"
+			   aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+			</a>
+		</li>
+
+		<!-- Page Numbers -->
+		@for (int i = 1; i <= totalPages; i++)
+		{
+			<li class="page-item @(i == pageNumber ? "active" : "")">
+				<a class="page-link"
+				   href="@Url.Action("Index", new { pageNumber = i })">
+					@i
+				</a>
+			</li>
+		}
+
+		<!-- Next -->
+		<li class="page-item @(pageNumber >= totalPages ? "d-none" : "")">
+			<a class="page-link"
+			   href="@(pageNumber < totalPages
+					  	  ? Url.Action("Index", new { pageNumber = pageNumber + 1 })
+                      	  : "#")"
+			   aria-label="Next">
+				<span aria-hidden="true">&raquo;</span>
+			</a>
+		</li>
+
+	</ul>
+</nav>
+
 
 
 @section Scripts {

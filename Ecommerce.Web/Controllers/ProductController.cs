@@ -9,13 +9,28 @@ namespace Ecommerce.Web.Controllers
 {
     public class ProductController(IUnitOfWork _unitOfWork, IWebHostEnvironment _environment) : Controller
     {
-        public IActionResult Index()
+        private const int PAGE_SIZE = 5;
+        public IActionResult Index(int pageNumber)
         {
-            var products = _unitOfWork.Products.Query()
-                        .OrderByDescending(p => p.CreatedAt)
+
+            IQueryable<Product> query = _unitOfWork.Products.Query()
                         .Include(p => p.Category)
                         .Include(p => p.Brand)
-                        .ToList();
+                        .OrderByDescending(p => p.CreatedAt);
+
+            if (pageNumber < 1)
+            {
+                pageNumber = 1;
+            }
+
+            int count = query.Count();
+            int totalPages = (int)Math.Ceiling(count / (double)PAGE_SIZE);
+            query = query.Skip((pageNumber - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+
+            var products = query.ToList();
+
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.TotalPages = totalPages;
 
             return View(products);
         }
