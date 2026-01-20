@@ -95,5 +95,84 @@ namespace Ecommerce.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult Edit(int id)
+        {
+            var product = _unitOfWork.Products.Query()
+                                .Include(p => p.Category)
+                                .Include(p => p.Brand)
+                                .FirstOrDefault(p => p.Id == id);
+
+            if (product == null)
+            {
+                RedirectToAction(nameof(Index));
+            }
+
+            EditProductVM productVM = new()
+            {
+                Name = product!.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Brand = product.Brand,
+                Category = product.Category
+            };
+
+            ViewData["ProductId"] = product.Id;
+            ViewData["ImageFileName"] = product.ImageUrl;
+            ViewData["CreatedAt"] = product.CreatedAt.ToString("MM/dd/yyyy");
+
+            return View(productVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, EditProductVM productVM)
+        {
+            var product = _unitOfWork.Products.Query()
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .FirstOrDefault(p => p.Id == id);
+
+            if (product == null)
+            {
+                RedirectToAction(nameof(Index));
+            }
+
+            if (!ModelState.IsValid)
+            {
+
+                ViewData["ProductId"] = product.Id;
+                ViewData["ImageFileName"] = product.ImageUrl;
+                ViewData["CreatedAt"] = product.CreatedAt.ToString("MM/dd/yyyy");
+
+                return View(productVM);
+            }
+
+            string newFileName = product.ImageUrl;
+            if (productVM.ImageFile != null)
+            {
+                newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff")
+                                  + Path.GetExtension(productVM.ImageFile.FileName);
+                string filePath = Path.Combine(_environment.WebRootPath, "images/products", newFileName);
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    productVM.ImageFile.CopyTo(stream);
+                }
+
+                string oldFilePath = Path.Combine(_environment.WebRootPath, "images/products", product.ImageUrl);
+                if (System.IO.File.Exists(oldFilePath))
+                {
+                    System.IO.File.Delete(oldFilePath);
+                }
+            }
+
+            product.Name = productVM.Name;
+            product.Description = productVM.Description;
+            product.Price = productVM.Price;
+            product.ImageUrl = newFileName;
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
