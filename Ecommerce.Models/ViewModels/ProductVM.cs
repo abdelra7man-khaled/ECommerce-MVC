@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -14,7 +15,13 @@ namespace Ecommerce.Models.ViewModels
         public decimal Price { get; set; }
         public IFormFile? ImageFile { get; set; }
 
-        public Brand Brand { get; set; }
-        public Category Category { get; set; }
+        [Required]
+        public int BrandId { get; set; }
+
+        [Required]
+        public int CategoryId { get; set; }
+
+        public IEnumerable<SelectListItem>? Brands { get; set; }
+        public IEnumerable<SelectListItem>? Categories { get; set; }
     }
 }
