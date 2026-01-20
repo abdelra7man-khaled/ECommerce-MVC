@@ -93,6 +93,8 @@ namespace Ecommerce.Web.Controllers
             await _unitOfWork.Products.AddAsync(newProduct);
             await _unitOfWork.SaveChangesAsync();
 
+            TempData["success"] = "Product added successfully";
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -172,6 +174,8 @@ namespace Ecommerce.Web.Controllers
 
             await _unitOfWork.SaveChangesAsync();
 
+            TempData["success"] = "Product updated successfully";
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -190,6 +194,8 @@ namespace Ecommerce.Web.Controllers
             }
             _unitOfWork.Products.Remove(product);
             await _unitOfWork.SaveChangesAsync();
+
+            TempData["success"] = "Product deleted successfully";
 
             return RedirectToAction(nameof(Index));
         }
