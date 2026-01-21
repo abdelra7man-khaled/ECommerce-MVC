@@ -56,7 +56,8 @@
 					Brand: @product.Brand.Name, Category: @product.Category.Name
 				</p>
 				<h4 class="mb-3">@product.Price.ToString("C")</h4>
-				<a class="btn btn-primary mb-2" href="#" role="button">Details</a>
+				<a class="btn btn-primary mb-2" asp-controller="Store" asp-action="Details"
+				   asp-route-id="@product.Id" role="button">Details</a>
 				<button type="button" class="btn btn-success mb-2">
 					Add to Cart <i class="bi bi-cart4"></i>
 				</button>

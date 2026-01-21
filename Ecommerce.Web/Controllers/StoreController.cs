@@ -63,5 +63,19 @@ namespace Ecommerce.Web.Controllers
 
             return View(storeSearchVM);
         }
+
+        public IActionResult Details(int id)
+        {
+            var product = _unitOfWork.Products.Query()
+                            .Include(p => p.Category)
+                            .Include(p => p.Brand)
+                            .FirstOrDefault(p => p.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
+
     }
 }
