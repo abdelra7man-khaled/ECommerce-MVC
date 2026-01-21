@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.DataAccess.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
