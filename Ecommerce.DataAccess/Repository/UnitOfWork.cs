@@ -11,6 +11,7 @@ namespace Ecommerce.DataAccess.Repository
         public IRepository<Product> Products { get; }
         public IRepository<Category> Categories { get; }
         public IRepository<Brand> Brands { get; }
+        public IRepository<ApplicationUser> ApplicationUsers { get; }
 
         public UnitOfWork(AppDbContext context)
         {
@@ -18,6 +19,7 @@ namespace Ecommerce.DataAccess.Repository
             Products = new Repository<Product>(_context);
             Categories = new Repository<Category>(_context);
             Brands = new Repository<Brand>(_context);
+            ApplicationUsers = new Repository<ApplicationUser>(_context);
         }
 
         public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();

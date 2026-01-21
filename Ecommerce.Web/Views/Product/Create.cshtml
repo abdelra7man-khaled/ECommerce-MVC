@@ -42,7 +42,7 @@
 			<div class="row mb-3">
 				<label class="col-sm-4 col-form-label" asp-for="Description"></label>
 				<div class="col-sm-8">
-					<textarea asp-for="Description" class="form-control border-0 shadow order-textbox"></textarea>
+					<textarea asp-for="@Html.Raw(Model.Description)" class="form-control border-0 shadow order-textbox"></textarea>
 					<span asp-validation-for="Description" class="text-danger"></span>
 				</div>
 			</div>
