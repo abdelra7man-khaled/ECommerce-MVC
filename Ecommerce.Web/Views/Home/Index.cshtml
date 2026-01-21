@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<Product>
+
+@{
     ViewData["Title"] = "Home Page";
 	ViewData["HomePage"] = true;
 }
@@ -19,3 +21,39 @@
 		</div>
 	</div>
 </div>
+
+<div class="bg-light">
+	<div class="container py-4">
+		<h2 class="pb-4 text-center">Recent Products</h2>
+		<div class="row mb-5 g-3">
+			@foreach(var product in Model)
+			{
+				<div class="col-lg-3 col-md-6">
+					<div class="rounded border shadow p-3 text-center h-100 product-card">
+						<img src="~/images/products/@product.ImageUrl" class="img-fluid"
+						style="height: 180px; object-fit: contain"/>
+						<hr />
+						<h5 class="py-2">@product.Name</h5>
+						<p>
+							Brand: @product.Brand.Name, Category: @product.Category.Name 
+						</p>
+						<h4 class="mb-3">@product.Price.ToString("C")</h4>
+						<a class="btn btn-primary mb-2" href="#" role="button">Details</a>
+						<button type="button" class="btn btn-success mb-2">
+							Add to Cart <i class="bi bi-cart4"></i>
+						</button>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+
+<style>
+		.product-card:hover {
+		transform: scale(1.03);
+		transition: transform 0.3s;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	}
+</style>
