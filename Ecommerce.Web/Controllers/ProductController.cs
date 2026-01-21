@@ -13,15 +13,16 @@ namespace Ecommerce.Web.Controllers
         public IActionResult Index(int pageNumber, string? search)
         {
 
-            IQueryable<Product> query = _unitOfWork.Products.Query()
+            var query = _unitOfWork.Products.Query()
                         .Include(p => p.Category)
                         .Include(p => p.Brand)
-                        .OrderByDescending(p => p.CreatedAt);
+                        .OrderByDescending(p => p.CreatedAt)
+                        .AsQueryable();
 
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(p => p.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
-                                    p.Brand.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
+                query = query.Where(p => p.Name.Contains(search) ||
+                                    p.Brand.Name.Contains(search));
             }
 
             if (pageNumber < 1)

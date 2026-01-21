@@ -67,8 +67,8 @@
 		<!-- Previous -->
 		<li class="page-item @(pageNumber <= 1 ? "d-none" : "")">
 			<a class="page-link"
-			   href="@(pageNumber > 1
-								  	  ? Url.Action("Index", new { pageNumber = pageNumber - 1, search = search })
+			   href="@(pageNumber > 1 ? 
+						Url.Action("Index", new { pageNumber = pageNumber - 1, search = search })
 					  	  : "#")"
 			   aria-label="Previous">
 				<span aria-hidden="true">&laquo;</span>
@@ -89,8 +89,8 @@
 		<!-- Next -->
 		<li class="page-item @(pageNumber >= totalPages ? "d-none" : "")">
 			<a class="page-link"
-			   href="@(pageNumber < totalPages
-								  ? Url.Action("Index", new { pageNumber = pageNumber + 1, search = search })
+			   href="@(pageNumber < totalPages ? 
+						  Url.Action("Index", new { pageNumber = pageNumber + 1, search = search })
                       	  : "#")"
 			   aria-label="Next">
 				<span aria-hidden="true">&raquo;</span>
