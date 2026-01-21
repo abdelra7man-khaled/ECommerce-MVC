@@ -10,7 +10,7 @@ namespace Ecommerce.Web.Controllers
     public class ProductController(IUnitOfWork _unitOfWork, IWebHostEnvironment _environment) : Controller
     {
         private const int PAGE_SIZE = 5;
-        public IActionResult Index(int pageNumber, string? search)
+        public IActionResult Index(int pageNumber = 1, string? search = null)
         {
 
             var query = _unitOfWork.Products.Query()
@@ -25,16 +25,12 @@ namespace Ecommerce.Web.Controllers
                                     p.Brand.Name.Contains(search));
             }
 
-            if (pageNumber < 1)
-            {
-                pageNumber = 1;
-            }
-
             int count = query.Count();
             int totalPages = (int)Math.Ceiling(count / (double)PAGE_SIZE);
-            query = query.Skip((pageNumber - 1) * PAGE_SIZE).Take(PAGE_SIZE);
 
-            var products = query.ToList();
+            var products = query.Skip((pageNumber - 1) * PAGE_SIZE)
+                                .Take(PAGE_SIZE)
+                                .ToList();
 
             ViewBag.PageNumber = pageNumber;
             ViewBag.TotalPages = totalPages;
