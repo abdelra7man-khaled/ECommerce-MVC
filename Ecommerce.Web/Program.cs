@@ -1,4 +1,5 @@
 using Ecommerce.DataAccess.Data;
+using Ecommerce.DataAccess.DbInitializer;
 using Ecommerce.DataAccess.Repository;
 using Ecommerce.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
@@ -31,6 +32,7 @@ namespace Ecommerce.Web
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
+            builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
@@ -47,6 +49,8 @@ namespace Ecommerce.Web
 
             app.UseAuthorization();
 
+            SeedDatabase();
+
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
@@ -54,6 +58,16 @@ namespace Ecommerce.Web
                 .WithStaticAssets();
 
             app.Run();
+
+
+            void SeedDatabase()
+            {
+                using (var scope = app.Services.CreateScope())
+                {
+                    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+                    dbInitializer.Initialize();
+                }
+            }
         }
     }
 }
