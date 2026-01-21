@@ -2,7 +2,7 @@
 
 <div class="row">
 	<div class="col-md-4 text-center">
-		<img src="~/images/products/@Model.ImageUrl" class="img-fluid mb-3" width="250"/>
+		<img src="~/images/products/@Model.ImageUrl" class="img-fluid mb-3" width="500"/>
 	</div>
 	<div class="col-md-8">
 		<h3 class="mb-3">@Model.Name</h3>
@@ -28,7 +28,8 @@
 			</div>
 		</div>
 
-		<div class="fw-bold">Description</div>
-		<div style="white-space: pre-line;">@Model.Description</div>
+		<div class="fw-bold text-center"><strong>Description</strong></div>
+		<hr />
+		<div style="white-space: pre-line;">@Html.Raw(Model.Description)</div>
 	</div>
 </div>

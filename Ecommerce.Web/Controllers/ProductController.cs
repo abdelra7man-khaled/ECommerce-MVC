@@ -169,7 +169,7 @@ namespace Ecommerce.Web.Controllers
                 return View(productVM);
             }
 
-            string newFileName = product.ImageUrl;
+            string newFileName = product!.ImageUrl;
             if (productVM.ImageFile != null)
             {
                 newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff")
