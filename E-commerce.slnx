@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="Ecommerce.DataAccess/Ecommerce.DataAccess.csproj" />
   <Project Path="Ecommerce.Models/Ecommerce.Models.csproj" />
+  <Project Path="ECommerce.Utility/Ecommerce.Utility.csproj" Id="f05b7a67-5d5f-4b40-9549-4daf46abf24e" />
   <Project Path="Ecommerce.Web/Ecommerce.Web.csproj" />
 </Solution>
