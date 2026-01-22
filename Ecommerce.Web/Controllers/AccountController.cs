@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Models;
 using Ecommerce.Models.ViewModels;
 using Ecommerce.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -112,6 +113,17 @@ namespace Ecommerce.Web.Controllers
             {
                 await _signInManager.SignOutAsync();
             }
+            return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public IActionResult Profile()
+        {
+            return View();
+        }
+
+        public IActionResult AccessDenied()
+        {
             return RedirectToAction("Index", "Home");
         }
     }

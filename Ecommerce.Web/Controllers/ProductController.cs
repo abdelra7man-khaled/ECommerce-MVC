@@ -1,12 +1,15 @@
 ﻿using Ecommerce.DataAccess.Repository.IRepository;
 using Ecommerce.Models;
 using Ecommerce.Models.ViewModels;
+using Ecommerce.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Web.Controllers
 {
+    [Authorize(Roles = SD.Role_Admin)]
     public class ProductController(IUnitOfWork _unitOfWork, IWebHostEnvironment _environment) : Controller
     {
         private const int PAGE_SIZE = 5;
