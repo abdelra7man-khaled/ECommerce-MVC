@@ -1,0 +1,54 @@
+﻿@model List<ApplicationUser>
+@inject UserManager<IdentityUser> UserManager
+
+<h2 class="text-center mb-5 register-title">Users</h2>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Phone Number</th>
+			<th>Role</th>
+			<th>Created At</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var user in Model)
+		{
+			<tr>
+				<td>@(user.FirstName + " " + user.LastName)</td>
+				<td>@user.Email</td>
+				<td>@user.PhoneNumber</td>
+				<td>
+					@{
+						var userRoles = await UserManager.GetRolesAsync(user);
+						var roles = String.Join(", ", userRoles);
+
+						var color = "text-bg-secondary";
+						if(roles.Contains(SD.Role_Admin))
+						{
+							color = "text-bg-danger";
+						}
+						else if(roles.Contains(SD.Role_Seller))
+						{
+							color = "text-bg-warning";
+						}
+						else if(roles.Contains(SD.Role_Customer))
+						{
+							color = "text-bg-info";
+						}
+
+						<span class="badge @color">@roles</span>
+					}
+				</td>
+				<td>@user.CreatedAt.ToString("MM/dd/yyyy")</td>
+				<td>
+					<a class="btn btn-primary" asp-controller="User" asp-action="Details" 
+					asp-route-id="@user.Id">Details</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
