@@ -117,7 +117,66 @@ namespace Ecommerce.Web.Controllers
         }
 
         [Authorize]
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
+        {
+            var appUser = await _userManager.GetUserAsync(User) as ApplicationUser;
+            if (appUser is null)
+            {
+                RedirectToAction("Index", "Home");
+            }
+
+            ProfileVM profileVM = new()
+            {
+                FirstName = appUser!.FirstName,
+                LastName = appUser!.LastName,
+                Email = appUser.Email ?? string.Empty,
+                PhoneNumber = appUser.PhoneNumber,
+                City = appUser!.City,
+                Address = appUser!.Address
+            };
+
+            return View(profileVM);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Profile(ProfileVM profileVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ErrorMessage = "please fill all fields are required";
+                return View(profileVM);
+            }
+
+            var appUser = await _userManager.GetUserAsync(User) as ApplicationUser;
+            if (appUser is null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            appUser.FirstName = profileVM.FirstName;
+            appUser.LastName = profileVM.LastName;
+            appUser.Email = profileVM.Email;
+            appUser.UserName = profileVM.Email;
+            appUser.PhoneNumber = profileVM.PhoneNumber;
+            appUser.City = profileVM.City;
+            appUser.Address = profileVM.Address;
+
+            var result = await _userManager.UpdateAsync(appUser);
+            if (result.Succeeded)
+            {
+                TempData["success"] = "Profile updated successfully";
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "failed to update profile: " + result.Errors.First().Description;
+            }
+
+            return View(profileVM);
+        }
+
+        [Authorize]
+        public IActionResult ChangePassword()
         {
             return View();
         }
