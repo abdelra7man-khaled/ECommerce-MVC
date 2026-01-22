@@ -19,12 +19,22 @@ namespace Ecommerce.Web.Controllers
 
         public IActionResult Register()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM registerVM)
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(registerVM);
@@ -57,6 +67,43 @@ namespace Ecommerce.Web.Controllers
             }
 
             return View(registerVM);
+        }
+
+        public IActionResult Login()
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginVM loginVM)
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(loginVM);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(loginVM.Email,
+                loginVM.Password, loginVM.RememberMe, lockoutOnFailure: false);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Invalid Credentials, Please try again.";
+            }
+            return View();
         }
 
         public async Task<IActionResult> Logout()
