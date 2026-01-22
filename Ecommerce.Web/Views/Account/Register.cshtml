@@ -1,8 +1,8 @@
 ﻿@model RegisterVM
 
 <div class="row">
-	<div class="col-lg-6 mx-auto rounded border p-4">
-		<h2 class="text-center mb-3">Register</h2>
+	<div class="col-lg-6 mx-auto rounded border p-4 register-card">
+		<h2 class="text-center mb-3 register-title">Register</h2>
 		<hr />
 
 		<div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
@@ -18,7 +18,7 @@
 			<div class="row mb-3">
 				<label class="col-sm-4 col-form-label">Last Name<span style="color:red;">*</span></label>
 				<div class="col-sm-8">
-					<input asp-for=LastName" class="form-control" />
+					<input asp-for="LastName" class="form-control" />
 					<span asp-validation-for="LastName" class="text-danger"></span>
 				</div>
 			</div>
@@ -27,6 +27,30 @@
 				<div class="col-sm-8">
 					<input asp-for="Email" class="form-control" />
 					<span asp-validation-for="Email" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Password<span style="color:red;">*</span></label>
+				<div class="col-sm-8">
+					<input asp-for="Password" class="form-control" type="password" id="password" />
+					<span asp-validation-for="Password" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Confirm Password<span style="color:red;">*</span></label>
+				<div class="col-sm-8">
+					<input asp-for="ConfirmPassword" class="form-control" type="password" id="confirmPassword" />
+					<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<div class="col-sm-8 offset-sm-4">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="togglePasswords">
+						<label class="form-check-label fw-semibold" for="togglePasswords">
+							Show Password
+						</label>
+					</div>
 				</div>
 			</div>
 			<div class="row mb-3">
@@ -50,23 +74,9 @@
 					<span asp-validation-for="Address" class="text-danger"></span>
 				</div>
 			</div>
-			<div class="row mb-3">
-				<label class="col-sm-4 col-form-label">Password<span style="color:red;">*</span></label>
-				<div class="col-sm-8">
-					<input asp-for="Password" class="form-control" type="password" />
-					<span asp-validation-for="Password" class="text-danger"></span>
-				</div>
-			</div>
-			<div class="row mb-3">
-				<label class="col-sm-4 col-form-label">Confirm Password<span style="color:red;">*</span></label>
-				<div class="col-sm-8">
-					<input asp-for="ConfirmPassword" class="form-control" type="password"/>
-					<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-				</div>
-			</div>
-
-			<div class="row mb-3">
-				<div class="col-sm-4 offset-sm-4 d-grid">
+			
+			<div class="row mb-3 justify-content-around mt-5">
+				<div class="col-sm-4 d-grid">
 					<button type="submit" class="btn btn-primary">Register</button>
 				</div>
 				<div class="col-sm-4 d-grid">
@@ -78,3 +88,34 @@
 		</form>
 	</div>
 </div>
+
+
+
+@section Scripts {
+	<script>
+		document.getElementById("togglePasswords").addEventListener("change", function () {
+			const type = this.checked ? "text" : "password";
+
+			document.getElementById("password").type = type;
+			document.getElementById("confirmPassword").type = type;
+		});
+	</script>
+
+	<partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+	.register-card {
+		border-top: 5px solid var(--bs-primary);
+		box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+	}
+
+	.register-title {
+		color: var(--bs-primary);
+	}
+
+	.register-card label {
+		font-weight: 600;
+	}
+
+</style>
