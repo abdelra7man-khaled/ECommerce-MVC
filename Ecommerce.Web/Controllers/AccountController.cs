@@ -4,6 +4,7 @@ using Ecommerce.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Ecommerce.Web.Controllers
 {
@@ -130,7 +131,7 @@ namespace Ecommerce.Web.Controllers
                 FirstName = appUser!.FirstName,
                 LastName = appUser!.LastName,
                 Email = appUser.Email ?? string.Empty,
-                PhoneNumber = appUser.PhoneNumber,
+                PhoneNumber = appUser.PhoneNumber ?? string.Empty,
                 City = appUser!.City,
                 Address = appUser!.Address
             };
@@ -207,6 +208,47 @@ namespace Ecommerce.Web.Controllers
             {
                 ViewBag.ErrorMessage = "failed to update password: " + result.Errors.First().Description;
             }
+
+            return View();
+        }
+
+        public IActionResult ForgotPassword()
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword([Required, EmailAddress] string email)
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.Email = email;
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.EmailError = ModelState["email"]?.Errors.First().ErrorMessage ?? "Invalid Email Address";
+            }
+
+            var appUser = await _userManager.FindByEmailAsync(email) as ApplicationUser;
+
+            if (appUser != null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
+                string resetUrl = Url.ActionLink("ResetPassword", "Account", new { token }) ?? "URL Error";
+
+                Console.WriteLine("Password reset link: " + resetUrl);
+            }
+
+            ViewBag.SuccessMessage = "Please check your email and click on the password reset link";
 
             return View();
         }
