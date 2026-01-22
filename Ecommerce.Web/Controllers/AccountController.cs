@@ -181,6 +181,36 @@ namespace Ecommerce.Web.Controllers
             return View();
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordVM changePasswordVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var appUser = await _userManager.GetUserAsync(User) as ApplicationUser;
+            if (appUser is null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(appUser,
+                changePasswordVM.CurrentPassword, changePasswordVM.NewPassword);
+
+            if (result.Succeeded)
+            {
+                TempData["success"] = "Password updated successfully";
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "failed to update password: " + result.Errors.First().Description;
+            }
+
+            return View();
+        }
+
         public IActionResult AccessDenied()
         {
             return RedirectToAction("Index", "Home");
