@@ -1,4 +1,5 @@
 ﻿using Ecommerce.DataAccess.Repository.IRepository;
+using Ecommerce.Models;
 using Ecommerce.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -37,6 +38,24 @@ namespace Ecommerce.Web.Controllers
             ViewBag.PageNumber = pageNumber;
 
             return View(appUsers);
+        }
+
+        public async Task<IActionResult> Details(string? id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return RedirectToAction("Index", "User");
+            }
+
+            var appUser = await _userManager.FindByIdAsync(id) as ApplicationUser;
+            if (appUser == null)
+            {
+                return RedirectToAction("Index", "User");
+            }
+
+            ViewBag.Roles = await _userManager.GetRolesAsync(appUser);
+
+            return View(appUser);
         }
     }
 }

@@ -1,0 +1,71 @@
+﻿@model ApplicationUser
+@inject UserManager<IdentityUser> UserManager
+
+<div class="row">
+	<div class="col-lg-6 mx-auto rounded border p-4 form-card">
+		<h2 class="text-center mb-3 form-title">User Details</h2>
+		<hr />
+		
+		<div class="row mb-2">
+			<div class="col-sm-4">First Name</div>
+			<div class="col-sm-8">@Model.FirstName</div>
+		</div>
+		<div class="row mb-2">
+			<div class="col-sm-4">Last Name</div>
+			<div class="col-sm-8">@Model.LastName</div>
+		</div>
+		<div class="row mb-2">
+			<div class="col-sm-4">Email</div>
+			<div class="col-sm-8">@Model.Email</div>
+		</div>
+		<div class="row mb-2">
+			<div class="col-sm-4">Phone Number</div>
+			<div class="col-sm-8">@Model.PhoneNumber</div>
+		</div>
+		<div class="row mb-2">
+			<div class="col-sm-4">City</div>
+			<div class="col-sm-8">@Model.City</div>
+		</div>
+		<div class="row mb-2">
+			<div class="col-sm-4">Address</div>
+			<div class="col-sm-8">@Model.Address</div>
+		</div>
+		<div class="row mb-2">
+			<div class="col-sm-4">Role</div>
+			<div class="col-sm-8">
+				@{
+					var userRoles = ViewBag.Roles;
+					var roles = String.Join(", ", userRoles);
+
+					var color = "text-bg-secondary";
+					if (roles.Contains(SD.Role_Admin))
+					{
+						color = "text-bg-danger";
+					}
+					else if (roles.Contains(SD.Role_Seller))
+					{
+						color = "text-bg-warning";
+					}
+					else if (roles.Contains(SD.Role_Customer))
+					{
+						color = "text-bg-info";
+					}
+
+					<span class="badge @color">@roles</span>
+				}
+			</div>
+		</div>
+		<div class="row mb-2">
+			<div class="col-sm-4">Created At</div>
+			<div class="col-sm-8">@Model.CreatedAt</div>
+		</div>
+
+		<hr />
+
+		<div>
+			<a asp-controller="User" asp-action="Index" class="btn btn-primary">Back</a>
+
+			<button class="btn btn-danger" type="button">Delete</button>
+		</div>
+	</div>
+</div>

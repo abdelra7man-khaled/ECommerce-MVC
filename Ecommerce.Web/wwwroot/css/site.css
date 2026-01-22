@@ -30,15 +30,15 @@ body {
   text-align: start;
 }
 
-.register-card {
+.form-card {
     border-top: 5px solid var(--bs-primary);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
-.register-title {
+.form-title {
     color: var(--bs-primary);
 }
 
-.register-card label {
+.form-card label {
     font-weight: 600;
 }
