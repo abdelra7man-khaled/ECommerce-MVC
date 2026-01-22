@@ -104,5 +104,37 @@ namespace Ecommerce.Web.Controllers
 
             return RedirectToAction("Details", "User", new { id });
         }
+
+        public async Task<IActionResult> DeleteUser(string? id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return RedirectToAction("Index", "User");
+            }
+
+            var appUser = await _userManager.FindByIdAsync(id);
+            if (appUser is null)
+            {
+                return RedirectToAction("Index", "User");
+            }
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser!.Id == appUser.Id)
+            {
+                TempData["error"] = "You can't delete your own account";
+                return RedirectToAction("Details", "User", new { id });
+            }
+
+            var result = await _userManager.DeleteAsync(appUser);
+            if (result.Succeeded)
+            {
+                TempData["success"] = "User deleted successfully";
+                return RedirectToAction("Index", "User");
+            }
+
+            TempData["error"] = "Unable to delete this user: " + result.Errors.First().Description;
+
+            return RedirectToAction("Details", "User", new { id });
+        }
     }
 }
