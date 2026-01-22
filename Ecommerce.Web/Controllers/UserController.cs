@@ -9,6 +9,7 @@ namespace Ecommerce.Web.Controllers
     [Authorize(Roles = SD.Role_Admin)]
     public class UserController : Controller
     {
+        private const int PAGE_SIZE = 5;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -19,13 +20,21 @@ namespace Ecommerce.Web.Controllers
             _unitOfWork = _uow;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int pageNumber = 1)
         {
-            //var query = _userManager.Users as IQueryable<ApplicationUser>;
-            //var appUsers = query?.OrderByDescending(u => u.CreatedAt).ToList();
-            var appUsers = _unitOfWork.ApplicationUsers.Query()
+            var query = _unitOfWork.ApplicationUsers.Query()
                             .OrderByDescending(u => u.CreatedAt)
-                            .ToList();
+                            .AsQueryable();
+
+            int count = query.Count();
+            int totalPages = (int)Math.Ceiling(count / (double)PAGE_SIZE);
+
+            var appUsers = query.Skip((pageNumber - 1) * PAGE_SIZE)
+                    .Take(PAGE_SIZE)
+                    .ToList();
+
+            ViewBag.TotalPages = totalPages;
+            ViewBag.PageNumber = pageNumber;
 
             return View(appUsers);
         }
