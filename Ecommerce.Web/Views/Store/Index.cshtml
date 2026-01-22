@@ -75,7 +75,7 @@
 		<li class="page-item @(pageNumber <= 1 ? "d-none" : "")">
 			<a class="page-link"
 			   href="@(pageNumber > 1 ?
-										  Url.Action("Index", new { pageNumber = pageNumber - 1, search = Model.Search, brand = Model.Brand, category = Model.Category, sort = Model.Sort })
+							Url.Action("Index", new { pageNumber = pageNumber - 1, search = Model.Search, brand = Model.Brand, category = Model.Category, sort = Model.Sort })
 						  	  : "#")"
 			   aria-label="Previous">
 				<span aria-hidden="true">&laquo;</span>
