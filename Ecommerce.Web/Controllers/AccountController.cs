@@ -253,6 +253,52 @@ namespace Ecommerce.Web.Controllers
             return View();
         }
 
+        public IActionResult ResetPassword(string? token)
+        {
+            if (_signInManager.IsSignedIn(User) || token is null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(string? token, PasswordResetVM passwordResetVM)
+        {
+            if (_signInManager.IsSignedIn(User) || token is null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(passwordResetVM);
+            }
+
+            var appUser = await _userManager.FindByEmailAsync(passwordResetVM.Email) as ApplicationUser;
+            if (appUser == null)
+            {
+                ViewBag.ErrorMessage = "Token is not valid";
+                return View(passwordResetVM);
+            }
+
+            var result = await _userManager.ResetPasswordAsync(appUser, token, passwordResetVM.NewPassword);
+            if (result.Succeeded)
+            {
+                TempData["success"] = "Password reset successfully";
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View(passwordResetVM);
+        }
+
         public IActionResult AccessDenied()
         {
             return RedirectToAction("Index", "Home");
