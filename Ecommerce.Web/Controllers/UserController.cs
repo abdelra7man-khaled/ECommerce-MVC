@@ -4,6 +4,7 @@ using Ecommerce.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Ecommerce.Web.Controllers
 {
@@ -55,7 +56,53 @@ namespace Ecommerce.Web.Controllers
 
             ViewBag.Roles = await _userManager.GetRolesAsync(appUser);
 
+            var availableRoles = _roleManager.Roles.ToList();
+            var items = new List<SelectListItem>();
+
+            foreach (var role in availableRoles)
+            {
+                items.Add(new SelectListItem
+                {
+                    Text = role.NormalizedName,
+                    Value = role.Name,
+                    Selected = await _userManager.IsInRoleAsync(appUser, role.Name!)
+                });
+            }
+
+            ViewBag.SelectItems = items;
+
             return View(appUser);
+        }
+
+        public async Task<IActionResult> EditRole(string? id, string? newRole)
+        {
+            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(newRole))
+            {
+                return RedirectToAction("Index", "User");
+            }
+
+            bool isRoleExists = await _roleManager.RoleExistsAsync(newRole);
+            var appUser = await _userManager.FindByIdAsync(id);
+
+            if (!isRoleExists || appUser is null)
+            {
+                return RedirectToAction("Index", "User");
+            }
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser!.Id == appUser.Id)
+            {
+                TempData["error"] = "You can't update your own role";
+                return RedirectToAction("Details", "User", new { id });
+            }
+
+            var oldRoles = await _userManager.GetRolesAsync(appUser);
+            await _userManager.RemoveFromRolesAsync(appUser, oldRoles);
+            await _userManager.AddToRoleAsync(appUser, newRole);
+
+            TempData["success"] = "User role updated successfully";
+
+            return RedirectToAction("Details", "User", new { id });
         }
     }
 }

@@ -52,6 +52,9 @@
 					}
 
 					<span class="badge @color">@roles</span>
+					<button class="btn btn-link text-decoration-none" type="button" data-bs-toggle="modal" data-bs-target="#roleModal">
+						Edit
+					</button>
 				}
 			</div>
 		</div>
@@ -66,6 +69,30 @@
 			<a asp-controller="User" asp-action="Index" class="btn btn-primary">Back</a>
 
 			<button class="btn btn-danger" type="button">Delete</button>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="modal fade" id="roleModal" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5">Edit User Role</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form method="get" asp-controller="User" asp-action="EditRole">
+					<input type="hidden" value="@Model.Id" name="id"/>
+					<label>Select user role</label>
+					<select class="form-select mb-2" name="newRole" asp-items="@ViewBag.SelectItems">
+
+					</select>
+					<button type="submit" class="btn btn-primary">Save</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>
