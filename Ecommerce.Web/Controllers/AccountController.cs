@@ -46,7 +46,7 @@ namespace Ecommerce.Web.Controllers
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(newUser, SD.Role_Customer);
-                await _signInManager.SignInAsync(newUser, false);
+                await _signInManager.SignInAsync(newUser, isPersistent: false);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -57,6 +57,15 @@ namespace Ecommerce.Web.Controllers
             }
 
             return View(registerVM);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                await _signInManager.SignOutAsync();
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }
