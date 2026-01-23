@@ -8,6 +8,8 @@ namespace Ecommerce.DataAccess.Repository.IRepository
         IRepository<Category> Categories { get; }
         IRepository<Brand> Brands { get; }
         IRepository<ApplicationUser> ApplicationUsers { get; }
+        IRepository<Order> Orders { get; }
+        IRepository<OrderItem> OrderItems { get; }
         Task<int> SaveChangesAsync();
     }
 }

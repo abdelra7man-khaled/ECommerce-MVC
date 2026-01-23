@@ -12,6 +12,8 @@ namespace Ecommerce.DataAccess.Repository
         public IRepository<Category> Categories { get; }
         public IRepository<Brand> Brands { get; }
         public IRepository<ApplicationUser> ApplicationUsers { get; }
+        public IRepository<Order> Orders { get; }
+        public IRepository<OrderItem> OrderItems { get; }
 
         public UnitOfWork(AppDbContext context)
         {
@@ -20,6 +22,8 @@ namespace Ecommerce.DataAccess.Repository
             Categories = new Repository<Category>(_context);
             Brands = new Repository<Brand>(_context);
             ApplicationUsers = new Repository<ApplicationUser>(_context);
+            Orders = new Repository<Order>(_context);
+            OrderItems = new Repository<OrderItem>(_context);
         }
 
         public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();
