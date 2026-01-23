@@ -139,6 +139,70 @@
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     </script>
+    <script>
+        function getShoppingCart()
+        {
+			const cookieName = "shopping_cart";
+			let cookieArray = document.cookie.split(';');
+
+            for(let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i];
+                if (cookie.includes(cookieName)) 
+                {
+                    let cookieValue = cookie.substring(cookie.indexOf("=") + 1);
+                    
+                    try
+                    {
+                        let cart = JSON.parse(atob(cookieValue));
+						return cart;
+                    }
+                    catch(exception)
+                    {
+                        break;
+                    }
+                }
+			}
+
+            return {};
+        }
+
+        function saveCart(cart)
+        {
+			let cartStr = btoa(JSON.stringify(cart));
+
+			let date = new Date();
+            date.setDate(date.getDate() + 365);
+			document.cookie = "shopping_cart=" + cartStr + ";expires=" + date.toUTCString() + ";path=/; SameSite=Strict; Secure";
+        }
+
+        function addToCart(button , id)
+        {
+			let cart = getShoppingCart();
+            let quantity = cart[id];
+
+            if(isNaN(quantity))
+            {
+				cart[id] = 1;
+            }
+            else
+            {
+				cart[id] = Number(quantity) + 1;
+            }
+
+			saveCart(cart);
+			button.innerHTML = "Added <i class='bi bi-check-lg'></i>";
+
+			let cartSize = 0;
+            for(var cartItem of Object.entries(cart))
+            {
+				quantity = cartItem[1];
+                if(isNaN(quantity)) continue;
+
+				cartSize += Number(quantity);
+            }
+			document.getElementById("CartSize").innerHTML = cartSize;
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
