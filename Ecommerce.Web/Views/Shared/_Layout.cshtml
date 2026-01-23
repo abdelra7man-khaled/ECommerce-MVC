@@ -46,7 +46,7 @@
                             <a class="nav-link text-white" asp-area="" asp-controller="Cart" asp-action="Index">
                                 <i class="bi bi-cart3 h3"></i>
                                 <span id="CartSize" class="badge text-bg-light" style="vertical-align: top">
-                                    0
+									@CartHelper.GetCartSize(Context.Request, Context.Response)
                                 </span>
                             </a>
                         </li>
