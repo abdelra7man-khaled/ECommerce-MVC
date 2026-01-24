@@ -1,0 +1,134 @@
+﻿
+@{
+	int pageNumber = ViewBag.PageNumber;
+	int totalPages = ViewBag.TotalPages;
+}
+
+<h3 class="text-center mb-4 form-title">Orders</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Units</th>
+            <th>Total</th>
+            <th>Payment Method</th>
+            <th>Payment Status</th>
+            <th>Order Status</th>
+            <th>Date</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (Order order in ViewBag.Orders)
+        {
+            int count = 0;
+            decimal total = order.ShippingCost;
+            foreach (OrderItem item in order.OrderItems)
+            {
+                count += item.Quantity;
+                total += item.Quantity * item.UnitPrice;
+            }
+
+
+            string paymentBadgeColor = "bg-danger";
+            if (order.PaymentStatus == "Pending")
+            {
+                paymentBadgeColor = "bg-warning text-dark";
+            }
+            else if (order.PaymentStatus == "Accepted")
+            {
+                paymentBadgeColor = "bg-success";
+            }
+            else if (order.PaymentStatus == "Canceled")
+            {
+                paymentBadgeColor = "bg-secondary";
+            }
+
+
+            string orderBadgeColor = "bg-danger";
+            if (order.OrderStatus == "Pending")
+            {
+                orderBadgeColor = "bg-warning text-dark";
+            }
+            else if (order.OrderStatus == "Accepted")
+            {
+                orderBadgeColor = "bg-success";
+            }
+            else if (order.OrderStatus == "Canceled")
+            {
+                orderBadgeColor = "bg-secondary";
+            }
+            else if (order.OrderStatus == "Shipped")
+            {
+                orderBadgeColor = "bg-primary";
+            }
+            else if (order.OrderStatus == "Delivered")
+            {
+                orderBadgeColor = "bg-success";
+            }
+            else if (order.OrderStatus == "Returned")
+            {
+                orderBadgeColor = "bg-info text-dark";
+            }
+            else if (order.OrderStatus == "Deleted")
+            {
+                orderBadgeColor = "bg-dark";
+            }
+
+            <tr>
+                <td>@count</td>
+                <td>@(total)$</td>
+                <td>@order.PaymentMethod</td>
+                <td><span class="badge rounded-pill @paymentBadgeColor">@order.PaymentStatus</span></td>
+                <td><span class="badge rounded-pill @orderBadgeColor">@order.OrderStatus</span></td>
+                <td>@order.OrderDate.ToString("MM/dd/yyyy")</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-controller="CustomerOrder" asp-action="Details"
+                       asp-route-id="@order.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<nav>
+	<ul class="pagination justify-content-center">
+
+		<!-- Previous -->
+		<li class="page-item @(pageNumber <= 1 ? "d-none" : "")">
+			<a class="page-link"
+			   href="@(pageNumber > 1 ?
+							Url.Action("Index", new { pageNumber = pageNumber - 1})
+						  	  : "#")"
+			   aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+			</a>
+		</li>
+
+		<!-- Page Numbers -->
+		@for (int i = 1; i <= totalPages; i++)
+		{
+			<li class="page-item @(i == pageNumber ? "active" : "")">
+				<a class="page-link"
+				   href="@Url.Action("Index", new { pageNumber = i})">
+					@i
+				</a>
+			</li>
+		}
+
+		<!-- Next -->
+		<li class="page-item @(pageNumber >= totalPages ? "d-none" : "")">
+			<a class="page-link"
+			   href="@(pageNumber < totalPages ?
+						  	  Url.Action("Index", new { pageNumber = pageNumber + 1})
+                      	  	  : "#")"
+			   aria-label="Next">
+				<span aria-hidden="true">&raquo;</span>
+			</a>
+		</li>
+
+	</ul>
+</nav>
