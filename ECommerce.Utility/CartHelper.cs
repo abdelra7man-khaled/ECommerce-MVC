@@ -59,6 +59,7 @@ namespace Ecommerce.Utility
 
                 var orderItem = new OrderItem
                 {
+                    ProductId = productId,
                     Product = product,
                     Quantity = quantity,
                     UnitPrice = product.Price

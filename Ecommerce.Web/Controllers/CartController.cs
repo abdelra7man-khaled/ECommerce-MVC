@@ -1,4 +1,5 @@
 ﻿using Ecommerce.DataAccess.Repository.IRepository;
+using Ecommerce.Models;
 using Ecommerce.Models.ViewModels;
 using Ecommerce.Utility;
 using Microsoft.AspNetCore.Authorization;
@@ -62,6 +63,79 @@ namespace Ecommerce.Web.Controllers
             TempData["PaymentMethod"] = checkoutVM.PaymentMethod;
 
             return RedirectToAction("Confirm");
+        }
+
+        public async Task<IActionResult> Confirm()
+        {
+            var cartItems = await CartHelper.GetCartItems(Request, Response, _unitOfWork);
+            var grantTotal = CartHelper.GetCartTotal(cartItems) + _shippingCost;
+
+            int cartSize = 0;
+            foreach (var item in cartItems)
+            {
+                cartSize += item.Quantity;
+            }
+
+            string deliveryAddress = TempData["DeleveryAddress"]?.ToString() ?? string.Empty;
+            string paymentMethod = TempData["PaymentMethod"]?.ToString() ?? string.Empty;
+            TempData.Keep();
+
+            if (cartSize == 0 || string.IsNullOrEmpty(deliveryAddress) || string.IsNullOrEmpty(paymentMethod))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.DeliveryAddress = deliveryAddress;
+            ViewBag.PaymentMethod = paymentMethod;
+            ViewBag.GrantTotal = grantTotal;
+            ViewBag.CartSize = cartSize;
+
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Confirm(int dummy)
+        {
+            var cartItems = await CartHelper.GetCartItems(Request, Response, _unitOfWork);
+
+            string deliveryAddress = TempData["DeleveryAddress"]?.ToString() ?? string.Empty;
+            string paymentMethod = TempData["PaymentMethod"]?.ToString() ?? string.Empty;
+            TempData.Keep();
+
+            if (cartItems.Count == 0 || string.IsNullOrEmpty(deliveryAddress) || string.IsNullOrEmpty(paymentMethod))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var appUser = await _userManager.GetUserAsync(User) as ApplicationUser;
+            if (appUser == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var order = new Order
+            {
+                ApplicationUserId = appUser.Id,
+                OrderItems = cartItems,
+                ShippingCost = _shippingCost,
+                DeliveryAddress = deliveryAddress,
+                PaymentMethod = paymentMethod,
+                PaymentStatus = "Pending",
+                PaymentDetails = string.Empty,
+                OrderStatus = "Pending",
+                OrderDate = DateTime.Now
+            };
+
+            await _unitOfWork.Orders.AddAsync(order);
+            await _unitOfWork.SaveChangesAsync();
+
+            // Clear the cart cookie
+            Response.Cookies.Delete("shopping_cart");
+
+            ViewBag.SuccessMessage = "Your order has been placed successfully";
+
+            return View();
         }
     }
 }
