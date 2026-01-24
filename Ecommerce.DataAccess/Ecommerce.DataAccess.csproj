@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ecommerce.Models\Ecommerce.Models.csproj" />
-    <ProjectReference Include="..\ECommerce.Utility\Ecommerce.Utility.csproj" />
   </ItemGroup>
 
 </Project>

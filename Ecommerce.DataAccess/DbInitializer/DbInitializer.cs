@@ -1,6 +1,5 @@
 ﻿using Ecommerce.DataAccess.Data;
 using Ecommerce.Models;
-using Ecommerce.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,11 +31,11 @@ namespace Ecommerce.DataAccess.DbInitializer
             catch (Exception ex) { }
 
             // Create roles if they are not created
-            if (!_roleManager.RoleExistsAsync(SD.Role_Customer).GetAwaiter().GetResult())
+            if (!_roleManager.RoleExistsAsync("Customer").GetAwaiter().GetResult())
             {
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Customer)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Seller)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole("Customer")).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole("Admin")).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole("Seller")).GetAwaiter().GetResult();
 
                 // If roles are not created, then we will create admin user
                 _userManager.CreateAsync(new ApplicationUser
@@ -54,7 +53,7 @@ namespace Ecommerce.DataAccess.DbInitializer
                 ApplicationUser user = _context.ApplicationUsers
                     .FirstOrDefault(u => u.Email == "admin@gmail.com")!;
 
-                _userManager.AddToRoleAsync(user, SD.Role_Admin).GetAwaiter().GetResult();
+                _userManager.AddToRoleAsync(user, "Admin").GetAwaiter().GetResult();
             }
             return;
         }
