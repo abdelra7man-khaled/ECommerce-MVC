@@ -39,5 +39,30 @@ namespace Ecommerce.Web.Controllers
 
             return View();
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+
+            var appUser = await _userManager.GetUserAsync(User);
+            if (appUser == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var order = _unitOfWork.Orders.Query()
+                        .Include(o => o.ApplicationUser)
+                        .Include(o => o.OrderItems)
+                        .ThenInclude(oi => oi.Product)
+                        .Where(o => o.ApplicationUserId == appUser.Id)
+                        .FirstOrDefault(o => o.Id == id);
+
+            if (order == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+
+            return View(order);
+        }
     }
 }
