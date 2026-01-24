@@ -53,5 +53,33 @@ namespace Ecommerce.Web.Controllers
 
             return View(order);
         }
+
+        public async Task<IActionResult> Edit(int id, string? payment_status, string? order_status)
+        {
+            var order = await _unitOfWork.Orders.GetAsync(id);
+            if (order is null)
+            {
+                return RedirectToAction("Index");
+            }
+            if (string.IsNullOrEmpty(payment_status) && string.IsNullOrEmpty(order_status))
+            {
+                return RedirectToAction("Details", new { id });
+            }
+
+            if (!string.IsNullOrEmpty(payment_status))
+            {
+                order.PaymentStatus = payment_status;
+                TempData["success"] = "Payment status updated successfully";
+            }
+            if (!string.IsNullOrEmpty(order_status))
+            {
+                order.OrderStatus = order_status;
+                TempData["success"] = "Order status updated successfully";
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id });
+        }
     }
 }
