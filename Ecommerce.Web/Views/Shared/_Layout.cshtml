@@ -202,6 +202,53 @@
             }
 			document.getElementById("CartSize").innerHTML = cartSize;
         }
+
+        function increaseQuantity(id)
+		{
+            let cart = getShoppingCart();
+            let quantity = cart[id];
+            if(isNaN(quantity))
+			{
+                cart[id] = 1;
+            }
+            else
+            {
+                cart[id] = Number(quantity) + 1;
+            }
+
+			saveCart(cart);
+			location.reload();
+        }
+
+		function decreaseQuantity(id)
+        {
+            let cart = getShoppingCart();
+            let quantity = cart[id];
+			if(isNaN(quantity))
+            {
+                return;
+            }
+            
+			quantity = Number(quantity);
+
+            if(quantity > 1)
+            {
+                cart[id] = quantity - 1;
+                saveCart(cart);
+                location.reload();
+            }
+        }
+
+        function remove(id)
+        {
+            let cart = getShoppingCart();
+            if(cart[id]) 
+            {
+                delete cart[id];
+                saveCart(cart);
+			    location.reload();
+            }
+        }
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

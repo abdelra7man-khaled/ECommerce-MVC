@@ -26,15 +26,15 @@
 							<h4>@item.Product.Name</h4>
 						</td>
 						<td style="white-space: nowrap">
-							<button type="button" class="btn btn-outline-secondary">-</button>
+							<button type="button" class="btn btn-outline-primary" onclick="decreaseQuantity(@item.Product.Id)"><i class="bi bi-dash-square"></i></button>
 							<span class="border rounded-3 p-2 m-1">@item.Quantity</span>
-							<button type="button" class="btn btn-outline-secondary">+</button>
+							<button type="button" class="btn btn-outline-primary" onclick="increaseQuantity(@item.Product.Id)"><i class="bi bi-plus-square"></i></button>
 						</td>
 						<td>
 							@(item.UnitPrice * item.Quantity)$
 						</td>
 						<td>
-							<i class="bi bi-trash text-danger h4" style="cursor: pointer"></i>
+							<i class="bi bi-trash text-danger h4" style="cursor: pointer" onclick="remove(@item.Product.Id)"></i>
 						</td>
 					</tr>
 				}
