@@ -33,5 +33,25 @@ namespace Ecommerce.Web.Controllers
 
             return View();
         }
+
+        public IActionResult Details(int id)
+        {
+            var order = _unitOfWork.Orders.Query()
+                        .Include(o => o.ApplicationUser)
+                        .Include(o => o.OrderItems)
+                        .ThenInclude(oi => oi.Product)
+                        .FirstOrDefault(o => o.Id == id);
+
+            if (order == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.NumberOfOrders = _unitOfWork.Orders.Query()
+                                    .Where(o => o.ApplicationUserId == order.ApplicationUserId)
+                                    .Count();
+
+            return View(order);
+        }
     }
 }
